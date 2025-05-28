@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Water Sort Puzzle - Mobile</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1A2036; /* Dark blue background */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      min-height: 100vh;
+      color: #e0e0e0;
+    }
+
+    header {
+      background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+      color: white;
+      width: 100%;
+      text-align: center;
+      padding: 18px 15px;
+      font-size: 1.8em;
+      font-weight: 700;
+      user-select: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-shadow: 1px 2px 4px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 10;
+      letter-spacing: 1px;
+    }
+
+    /* --- Home Screen Styles --- */
+    #homeScreenContainer {
+      padding: 40px 30px;
+      width: 90%;
+      max-width: 480px;
+      margin: 30px auto; /* Reduced top margin */
+      background: rgba(42, 39, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 35px;
+      color: #f0f0f0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(120, 100, 150, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4),
+                  inset 0 0 0 1.5px rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    #homeScreenContainer::before, #homeScreenContainer::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.1;
+        animation: pulse 15s infinite ease-in-out alternate;
+        pointer-events: none;
+    }
+    #homeScreenContainer::before {
+        width: 200px; height: 200px;
+        background: radial-gradient(circle, #8e44ad 0%, transparent 70%);
+        top: -50px; left: -50px;
+    }
+    #homeScreenContainer::after {
+        width: 250px; height: 250px;
+        background: radial-gradient(circle, #1abc9c 0%, transparent 70%);
+        bottom: -80px; right: -80px;
+        animation-delay: -7.5s;
+    }
+    @keyframes pulse {
+        0% { transform: scale(0.8) translate(0,0); opacity: 0.05;}
+        50% { transform: scale(1.1) translate(10px, -10px); opacity: 0.15;}
+        100% { transform: scale(0.8) translate(-10px, 10px); opacity: 0.05;}
+    }
+
+    #homeScreenContainer h2 {
+      font-size: 2.8em;
+      color: #fff;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(255,175,123,0.5), 0 0 20px rgba(215,109,119,0.4);
+      letter-spacing: 0.5px;
+    }
+
+    #homeSubtitle {
+      font-size: 1.2em;
+      color: #fadf70;
+      margin-bottom: 25px;
+      font-weight: 600;
+      padding: 0 15px;
+      line-height: 1.5;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    #playGameBtn {
+      padding: 18px 40px;
+      font-size: 1.35em;
+      font-weight: 600;
+      background: linear-gradient(145deg, #ffaf7b, #d76d77);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 8px 20px rgba(215, 109, 119, 0.4),
+                  inset 0 -2px 4px rgba(0,0,0,0.2);
+      transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+    #playGameBtn::before {
+      content: "🎮";
+      font-size: 1.1em;
+      line-height: 1;
+      filter: drop-shadow(0 0 3px rgba(255,255,255,0.5));
+    }
+    #playGameBtn:hover {
+      background: linear-gradient(145deg, #ffc39e, #e08a90);
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 12px 25px rgba(215, 109, 119, 0.5),
+                  inset 0 -1px 3px rgba(0,0,0,0.15);
+    }
+    #playGameBtn:active {
+      transform: translateY(0px) scale(0.98);
+      box-shadow: 0 5px 15px rgba(215, 109, 119, 0.3),
+                  inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+     #playGameBtn:disabled {
+      background: #58536e;
+      cursor: not-allowed;
+      color: #8c889e;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+      text-shadow: none;
+    }
+    #playGameBtn:disabled::before {
+        filter: grayscale(1);
+    }
+
+    #contactBtn {
+      padding: 12px 25px;
+      font-size: 1em;
+      font-weight: 600;
+      background: #6a4c93;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(106, 76, 147, 0.3),
+                  inset 0 -1px 2px rgba(0,0,0,0.15);
+      transition: all 0.2s ease-in-out;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #contactBtn::before {
+      content: "✉️";
+      font-size: 1em;
+      line-height: 1;
+    }
+    #contactBtn:hover {
+      background: #543b78;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(106, 76, 147, 0.4),
+                  inset 0 -1px 2px rgba(0,0,0,0.1);
+    }
+    #contactBtn:active {
+      transform: translateY(0px);
+      box-shadow: 0 3px 8px rgba(106, 76, 147, 0.25),
+                  inset 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+
+    /* --- Level Selection Screen Styles --- */
+    #levelSelectionContainer {
+      padding: 25px 20px;
+      width: 90%;
+      max-width: 550px;
+      margin: 20px auto;
+      background: rgba(30, 28, 42, 0.9);
+      backdrop-filter: blur(8px);
+      border-radius: 25px;
+      color: #f0f0f0;
+      border: 1px solid rgba(120, 100, 150, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .level-selection-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 0 10px;
+    }
+    .level-selection-header h2 {
+      font-size: 1.8em;
+      color: #e0e0e0;
+      text-shadow: 0 0 8px rgba(255,175,123,0.4);
+    }
+    #backToHomeBtn {
+      background: #6a4c93;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.90em;
+    }
+    #backToHomeBtn:hover { background: #543b78; }
+    #backToHomeBtn:active {
+      transform: scale(0.95) translateY(1px);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    }
+    .level-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding: 10px;
+      background: rgba(42, 39, 59, 0.5);
+      border-radius: 15px;
+    }
+    .level-grid-container::-webkit-scrollbar { width: 8px; }
+    .level-grid-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
+    .level-grid-container::-webkit-scrollbar-thumb { background: #58536e; border-radius: 10px; }
+    .level-grid-container::-webkit-scrollbar-thumb:hover { background: #716b8c; }
+    .level-button {
+      padding: 15px 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      background: linear-gradient(145deg, #8360c3, #2ebf91);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .level-button:hover:not(:disabled) {
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+      background: linear-gradient(145deg, #9b7ede, #4cd4ab);
+    }
+    .level-button:active:not(:disabled) {
+      transform: scale(0.98) translateY(0px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .level-button:disabled {
+        background: #777;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    /* --- Game Screen Styles --- */
+    .top-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 95%;
+      max-width: 550px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      gap: 10px;
+      user-select: none;
+    }
+    .status-info, .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .top-bar .status-info div {
+      font-size: 0.95em;
+      color: #311b92;
+      font-weight: 500;
+      padding: 5px 8px;
+      background-color: rgba(255,255,255,0.3);
+      border-radius: 6px;
+    }
+    .btn {
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.90em;
+    }
+    .btn::before { font-size: 0.9em; line-height: 1; }
+    #goHomeBtn { background: #7e57c2; }
+    #goHomeBtn::before { content: "🏠"; }
+    #goHomeBtn:hover:not(:disabled) { background: #673ab7; }
+    #goHomeBtn:disabled { background: #b39ddb; cursor: not-allowed; opacity: 0.7; }
+
+    #skipBtn { background: #9c27b0; }
+    #skipBtn::before { content: "⏭"; }
+    #skipBtn:hover:not(:disabled) { background: #ad5fb7; }
+    #skipBtn:disabled { background: #d1a9e0; cursor: not-allowed; opacity: 0.7; }
+
+    #resetGameBtn {
+      background: transparent;
+      color: #5e35b1;
+      border: 2px solid #7e57c2;
+      padding: 6px 10px;
+    }
+    #resetGameBtn::before { content: "↺"; }
+    #resetGameBtn:hover:not(:disabled) { background: rgba(126, 87, 194, 0.1); color: #4a148c; border-color: #5e35b1; }
+    #resetGameBtn:disabled { background: transparent; color: #b39ddb; border-color: #b39ddb; cursor: not-allowed; opacity: 0.7; }
+
+    .btn:active:not(:disabled) { transform: scale(0.95) translateY(1px); box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+    .game-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      justify-content: center;
+      align-items: start;
+      padding: 15px 10px 30px;
+      width: 100%;
+      max-width: 600px;
+      user-select: none;
+      perspective: 1000px;
+    }
+
+    /* --- UNIQUE POTION/VIAL BOTTLE STYLES START --- */
+    .bottle {
+      width: 55px;
+      height: 168px;
+      margin: 0 auto;
+      background: #2C2A4A; /* Dark, desaturated purple */
+
+      border: none;
+      outline: 2px solid #00E0FF; /* Vibrant cyan outline */
+      outline-offset: -2px;
+
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Softer shadow */
+
+      display: flex;
+      flex-direction: column-reverse;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, outline-color 0.25s ease-out;
+      position: relative;
+
+      /* Unique Potion/Vial Shape */
+      clip-path: path('M27.5,0 C15,0 10,10 10,20 L10,45 C5,55 0,70 0,95 C0,140 10,168 27.5,168 C45,168 55,140 55,95 C55,70 50,55 45,45 L45,20 C45,10 40,0 27.5,0 Z');
+      border-radius: 0;
+    }
+
+    .bottle:hover {
+      transform: scale(1.07) translateY(-5px);
+      outline-color: #80F8FF; /* Lighter cyan on hover */
+      box-shadow: 0px 4px 10px rgba(0, 224, 255, 0.25); /* Cyan glow shadow */
+    }
+
+    .bottle.selected {
+      transform: scale(1.1) translateY(-7px);
+      outline-color: #FF00C8; /* Bright magenta/pink for selection */
+      box-shadow:
+        0 0 12px 0px #FF00C8,
+        0px 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .bottle::after { /* Subtle curved/radial Shine effect */
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      width: 70%;
+      height: 40%;
+      background: radial-gradient(ellipse at 35% 35%, rgba(200, 220, 255, 0.08) 0%, transparent 50%);
+      opacity: 0.5;
+      z-index: 3;
+      pointer-events: none;
+      transform: rotate(-10deg);
+    }
+    /* --- UNIQUE POTION/VIAL BOTTLE STYLES END --- */
+
+    .liquid {
+      height: 25%;
+      width: 100%;
+      transition: background-color 0.3s ease;
+      position: relative;
+    }
+
+    .red    { background: #F87070; }
+    .blue   { background: #60A5FA; }
+    .green  { background: #34D399; }
+    .yellow { background: #FBBF24; }
+    .purple { background: #A78BFA; }
+    .orange { background: #FB923C; }
+    .cyan   { background: #22D3EE; }
+    .pink   { background: #F472B6; }
+    .grey   { background: #9CA3AF; }
+    .teal   { background: rgba(32, 201, 151, 0.92); }
+    .lime   { background: #A3E635; }
+    .brown  { background: #A16207; }
+
+
+    .empty  { background: transparent; }
+
+    .hidden { display: none !important; }
+
+     /* --- Modal Styles --- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1001; /* Above header */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background-color: #2a273b; /* Darker version of home screen container */
+      margin: 15% auto;
+      padding: 30px;
+      border: 1px solid rgba(120, 100, 150, 0.4);
+      width: 85%;
+      max-width: 450px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      color: #f0f0f0;
+      text-align: center;
+    }
+    .modal-content h3 {
+      font-size: 1.8em;
+      color: #ffaf7b;
+      margin-bottom: 20px;
+    }
+    .modal-content p {
+      font-size: 1.1em;
+      line-height: 1.7;
+      margin-bottom: 15px;
+    }
+    .modal-content p a {
+        color: #80F8FF; /* Cyan like bottle outline */
+        text-decoration: none;
+        font-weight: 600;
+        word-break: break-all; /* Ensure long email doesn't break layout */
+    }
+    .modal-content p a:hover {
+        text-decoration: underline;
+        color: #fff;
+    }
+    .close-modal-btn {
+      background: #d76d77; /* Reddish pink like header gradient */
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      margin-top: 20px;
+      transition: background-color 0.2s ease;
+    }
+    .close-modal-btn:hover {
+      background: #c15b63;
+    }
+
+
+    @media (max-width: 420px) {
+        .level-selection-header h2 { font-size: 1.5em; }
+        .level-grid-container { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; }
+        .level-button { font-size: 1em; padding: 12px 8px; }
+        #contactBtn { font-size: 0.9em; padding: 10px 20px;}
+        .modal-content { margin: 25% auto; padding: 20px;}
+        .modal-content h3 { font-size: 1.5em;}
+        .modal-content p { font-size: 1em;}
+    }
+    @media (max-width: 374px) {
+      header { font-size: 1.3em; padding: 12px; }
+      #homeScreenContainer { padding: 25px 15px; margin: 20px auto; }
+      #homeScreenContainer h2 { font-size: 2.2em; }
+      #homeSubtitle { font-size: 1.05em; margin-bottom: 15px; }
+      #playGameBtn { padding: 14px 30px; font-size: 1.2em; margin-bottom: 15px;}
+      #contactBtn { font-size: 0.85em; padding: 10px 18px;}
+      .top-bar { gap: 8px; margin-bottom: 15px; }
+      .status-info, .action-buttons { gap: 6px;}
+      .top-bar .status-info div { font-size: 0.85em; padding: 4px 6px; }
+      .btn { font-size: 0.8em; padding: 7px 10px; gap: 4px; }
+      #resetGameBtn { padding: 5px 8px;}
+      .btn::before { font-size: 0.85em; }
+      .game-container { grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px 5px 20px; }
+      .liquid { height: 25%; }
+    }
+  </style>
+</head>
+<body>
+  <header>Water Sort Puzzle</header>
+
+  <div id="homeScreenContainer">
+    <h2>Water Sort Puzzle</h2>
+    <p id="homeSubtitle">लेवल 200 जीतें, पाएं 2000 रुपये!<br>लेवल 600 जीतें, पाएं 6000 रुपये!</p> <!-- MODIFIED TEXT -->
+    <button id="playGameBtn">खेलें</button>
+    <button id="contactBtn">संपर्क करें</button>
+  </div>
+
+  <div id="levelSelectionContainer" class="hidden">
+    <div class="level-selection-header">
+        <h2>लेवल चुनें</h2>
+        <button id="backToHomeBtn" class="btn">< वापस</button>
+    </div>
+    <div id="levelGrid" class="level-grid-container">
+        <!-- Level buttons will be generated by JavaScript -->
+    </div>
+  </div>
+
+  <div id="gameScreenContainer" class="hidden">
+    <div class="top-bar">
+      <div class="status-info">
+        <div id="levelDisplay">लेवल: 1</div>
+        <div id="scoreDisplay">चालें: 0</div>
+        <div id="coinDisplay">कॉइन: 0</div>
+      </div>
+      <div class="action-buttons">
+        <button class="btn" id="goHomeBtn" onclick="goToHomeScreen()">होम</button>
+        <button class="btn" id="skipBtn" onclick="skipLevel()">Skip (50)</button>
+        <button class="btn" id="resetGameBtn" onclick="resetGame()">रीस्टार्ट</button>
+      </div>
+    </div>
+    <div class="game-container" id="game">
+      <!-- Bottles will be generated by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div id="contactModal" class="modal">
+    <div class="modal-content">
+      <h3>हमसे संपर्क करें</h3>
+      <p>किसी भी प्रश्न, सुझाव या पुरस्कार के दावे के लिए, कृपया हमें यहां ईमेल करें:</p>
+      <p><a href="mailto:ad7084259@gmail.com?subject=Water Sort Puzzle - Prize Claim / Inquiry">ad7084259@gmail.com</a></p>
+      <button id="closeContactModalBtn" class="close-modal-btn">बंद करें</button>
+    </div>
+  </div>
+
+
+  <!-- Sound Effects -->
+  <audio id="pourSound" src="https://assets.mixkit.co/sfx/download/mixkit-bubble-pop-up-1255.mp3" preload="auto"></audio>
+  <audio id="winSound" src="https://assets.mixkit.co/sfx/download/mixkit-completion-of-a-level-2063.mp3" preload="auto"></audio>
+  <audio id="errorSound" src="https://assets.mixkit.co/sfx/download/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
+
+<script>
+  const BOTTLE_CAPACITY = 4;
+  const SKIP_LEVEL_COST = 50;
+  const COINS_PER_WIN = 10;
+  const ALL_COLORS = Object.freeze([
+    "red", "blue", "green", "yellow", "purple", "orange", "cyan", "pink", "grey", "teal",
+    "lime", "brown"
+  ]);
+  const NUM_FIXED_EMPTY_BOTTLES = 2;
+
+  const levelConfigs = [];
+  const MAX_GAME_LEVELS = 600; // Define the new maximum number of levels
+
+    // Levels 1-30: Gradual increase
+    for (let i = 1; i <= 30; i++) {
+        let colors = 2 + Math.floor((i - 1) / 3); // Starts at 2, increases every 3 levels
+        colors = Math.min(colors, ALL_COLORS.length); // Cap at max available colors
+        levelConfigs.push({ level: i, colors: colors, bottles: colors + NUM_FIXED_EMPTY_BOTTLES });
+    }
+
+    // Levels 31-100: Medium difficulty, cycling 8-10 colors
+    for (let i = 31; i <= 100; i++) {
+        let colors = 8 + ((i - 31) % 3); // Cycles 8, 9, 10
+        colors = Math.min(colors, ALL_COLORS.length);
+        levelConfigs.push({ level: i, colors: colors, bottles: colors + NUM_FIXED_EMPTY_BOTTLES });
+    }
+
+    // Levels 101-200: Harder, cycling 10-12 colors
+    for (let i = 101; i <= 200; i++) {
+        let colors = 10 + ((i - 101) % 3); // Cycles 10, 11, 12
+        colors = Math.min(colors, ALL_COLORS.length);
+        levelConfigs.push({ level: i, colors: colors, bottles: colors + NUM_FIXED_EMPTY_BOTTLES });
+    }
+
+    // Levels 201-MAX_GAME_LEVELS: Consistently max colors (12)
+    for (let i = 201; i <= MAX_GAME_LEVELS; i++) {
+        let colors = ALL_COLORS.length; // Use all available colors
+        levelConfigs.push({ level: i, colors: colors, bottles: colors + NUM_FIXED_EMPTY_BOTTLES });
+    }
+
+
+  const TOTAL_LEVELS = levelConfigs.length;
+
+  // --- DOM Elements ---
+  const homeScreenContainer = document.getElementById('homeScreenContainer');
+  const levelSelectionContainer = document.getElementById('levelSelectionContainer');
+  const gameScreenContainer = document.getElementById('gameScreenContainer');
+  const playGameBtn = document.getElementById('playGameBtn');
+  const backToHomeBtn = document.getElementById('backToHomeBtn');
+  const levelGrid = document.getElementById('levelGrid');
+  const levelDisplay = document.getElementById('levelDisplay');
+  const scoreDisplay = document.getElementById('scoreDisplay');
+  const coinDisplay = document.getElementById('coinDisplay');
+  const gameContainer = document.getElementById('game');
+  const contactBtn = document.getElementById('contactBtn');
+  const contactModal = document.getElementById('contactModal');
+  const closeContactModalBtn = document.getElementById('closeContactModalBtn');
+
+
+  const pourSound = document.getElementById('pourSound');
+  const winSound = document.getElementById('winSound');
+  const errorSound = document.getElementById('errorSound');
+
+  // --- Game State ---
+  let currentLevel = 1;
+  let moves = 0;
+  let coins = 0;
+  let maxUnlockedLevel = 1;
+  let bottlesData = [];
+  let selectedBottleIndex = -1;
+  let hasWonLevel200 = false;
+  let hasWonLevel600 = false; // New flag for level 600 prize
+
+
+  // --- LocalStorage Keys ---
+  const LS_MAX_UNLOCKED_LEVEL = 'waterSort_maxUnlockedLevel_v13_prize600';
+  const LS_COINS = 'waterSort_coins_v13_prize600';
+  const LS_WON_LEVEL_200 = 'waterSort_wonLevel200_v13_prize600';
+  const LS_WON_LEVEL_600 = 'waterSort_wonLevel600_v13_prize600'; // New key for level 600
+
+
+  // --- Initialization ---
+  function initGame() {
+    loadGameData();
+    populateLevelGrid();
+    updateStatsDisplay();
+    showHomeScreen();
+
+    playGameBtn.addEventListener('click', () => {
+        playGameBtn.disabled = true;
+        showLevelSelectionScreen();
+        setTimeout(() => { playGameBtn.disabled = false; }, 300);
+    });
+    backToHomeBtn.addEventListener('click', goToHomeScreen);
+
+    contactBtn.addEventListener('click', () => {
+        contactModal.style.display = "block";
+    });
+    closeContactModalBtn.addEventListener('click', () => {
+        contactModal.style.display = "none";
+    });
+    window.addEventListener('click', (event) => {
+        if (event.target == contactModal) {
+            contactModal.style.display = "none";
+        }
+    });
+
+
+    updateSkipButtonState();
+    // console.log("Total levels configured:", TOTAL_LEVELS); // For debugging
+  }
+
+  // --- Screen Management ---
+  function showScreen(screenElement) {
+    homeScreenContainer.classList.add('hidden');
+    levelSelectionContainer.classList.add('hidden');
+    gameScreenContainer.classList.add('hidden');
+    screenElement.classList.remove('hidden');
+  }
+
+  function showHomeScreen() {
+    showScreen(homeScreenContainer);
+  }
+
+  function showLevelSelectionScreen() {
+    populateLevelGrid();
+    showScreen(levelSelectionContainer);
+  }
+
+  function showGameScreen() {
+    showScreen(gameScreenContainer);
+  }
+
+  // --- Level Selection ---
+  function populateLevelGrid() {
+    levelGrid.innerHTML = '';
+    for (let i = 0; i < TOTAL_LEVELS; i++) {
+      const levelNum = i + 1;
+      const button = document.createElement('button');
+      button.classList.add('level-button');
+      button.textContent = levelNum;
+      if (levelNum > maxUnlockedLevel) {
+        button.disabled = true;
+        button.innerHTML += ' <span style="font-size:0.8em; filter: grayscale(1);">☆</span>';
+      } else {
+        button.onclick = () => startGame(levelNum);
+      }
+      levelGrid.appendChild(button);
+    }
+  }
+
+  // --- Game Logic ---
+  function startGame(levelNum) {
+    currentLevel = levelNum;
+    moves = 0;
+    selectedBottleIndex = -1;
+
+    const config = levelConfigs.find(l => l.level === currentLevel);
+    if (!config) {
+      console.error("Level config not found for level:", currentLevel);
+      alert("त्रुटि: लेवल कॉन्फ़िगरेशन नहीं मिला। होम स्क्रीन पर लौट रहे हैं।");
+      showHomeScreen();
+      return;
+    }
+
+    let numColorsForLevel = Math.min(config.colors, ALL_COLORS.length);
+    bottlesData = generateLevelData(numColorsForLevel);
+
+    renderGame();
+    updateStatsDisplay();
+    showGameScreen();
+    disableGameInteractions(false);
+  }
+
+
+  function getTopLiquidBlock(bottleContent) {
+    if (!bottleContent || bottleContent.length === 0) return { color: null, count: 0 };
+    const topColor = bottleContent[bottleContent.length - 1];
+    let count = 0;
+    for (let i = bottleContent.length - 1; i >= 0; i--) {
+      if (bottleContent[i] === topColor) {
+        count++;
+      } else {
+        break;
+      }
+    }
+    return { color: topColor, count: count };
+  }
+
+  function generateLevelData(numColorsForLevel) {
+    const actualNumTotalBottles = numColorsForLevel + NUM_FIXED_EMPTY_BOTTLES;
+    const numFilledBottles = numColorsForLevel;
+
+    const colorsToUse = ALL_COLORS.slice(0, numColorsForLevel);
+    let colorPool = [];
+    colorsToUse.forEach(color => {
+        for (let i = 0; i < BOTTLE_CAPACITY; i++) {
+            colorPool.push(color);
+        }
+    });
+
+    for (let i = colorPool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [colorPool[i], colorPool[j]] = [colorPool[j], colorPool[i]];
+    }
+
+    let newBottlesData = [];
+    for (let i = 0; i < actualNumTotalBottles; i++) {
+        newBottlesData.push([]);
+    }
+
+    let poolIndex = 0;
+    for (let i = 0; i < numFilledBottles; i++) {
+        if (poolIndex >= colorPool.length) {
+            console.warn(`Level Generation Warning for level ${currentLevel}: Not enough colors in pool. Pool index: ${poolIndex}, Pool length: ${colorPool.length}`);
+            break;
+        }
+        for (let j = 0; j < BOTTLE_CAPACITY; j++) {
+            if (poolIndex < colorPool.length) {
+                newBottlesData[i].push(colorPool[poolIndex++]);
+            } else {
+                console.warn(`Level Generation Warning for level ${currentLevel}: Ran out of colors mid-bottle. Bottle ${i}, Unit ${j}`);
+                break;
+            }
+        }
+    }
+
+    if (poolIndex < numFilledBottles * BOTTLE_CAPACITY && numFilledBottles > 0) {
+        console.warn(`Level Generation Note for level ${currentLevel}: Only ${poolIndex} color units distributed out of expected ${numFilledBottles * BOTTLE_CAPACITY}.`);
+    }
+
+    let attempts = 0;
+    const MAX_RESHUFFLE_ATTEMPTS = 10;
+    while (isBoardSolved(newBottlesData) && attempts < MAX_RESHUFFLE_ATTEMPTS && newBottlesData.length > 0 && numFilledBottles > 0) {
+        let tempColorPoolForReshuffle = [];
+        for(let i = 0; i < numFilledBottles; i++) {
+            tempColorPoolForReshuffle.push(...newBottlesData[i]);
+            newBottlesData[i] = [];
+        }
+        for (let k = tempColorPoolForReshuffle.length - 1; k > 0; k--) {
+            const l = Math.floor(Math.random() * (k + 1));
+            [tempColorPoolForReshuffle[k], tempColorPoolForReshuffle[l]] = [tempColorPoolForReshuffle[l], tempColorPoolForReshuffle[k]];
+        }
+        let reshufflePoolIndex = 0;
+        for (let i = 0; i < numFilledBottles; i++) {
+            for (let j = 0; j < BOTTLE_CAPACITY; j++) {
+                if (reshufflePoolIndex < tempColorPoolForReshuffle.length) {
+                    newBottlesData[i].push(tempColorPoolForReshuffle[reshufflePoolIndex++]);
+                } else break;
+            }
+        }
+        attempts++;
+    }
+    if(isBoardSolved(newBottlesData) && newBottlesData.length > 0 && numFilledBottles > 0 && attempts >= MAX_RESHUFFLE_ATTEMPTS) {
+        console.error(`Level ${currentLevel} still solved after ${MAX_RESHUFFLE_ATTEMPTS} attempts.`);
+    }
+    return newBottlesData;
+  }
+
+  function isBoardSolved(boardData) {
+    if (!boardData || boardData.length === 0) return false;
+    return boardData.every(bottle =>
+      bottle.length === 0 ||
+      (bottle.length === BOTTLE_CAPACITY && bottle.every(c => c === bottle[0]))
+    );
+  }
+
+
+  function renderGame() {
+    gameContainer.innerHTML = '';
+    const numBottles = bottlesData.length;
+
+    let columns;
+    if (numBottles <= 4) columns = numBottles;
+    else if (numBottles <= 6) columns = 3;
+    else if (numBottles <= 8) columns = 4;
+    else if (numBottles <= 10) columns = 5;
+    else if (numBottles <= 12) columns = 4;
+    else if (numBottles <= 15) columns = 5;
+    else columns = 6;
+
+    gameContainer.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+
+    bottlesData.forEach((bottleContent, index) => {
+      const bottleDiv = document.createElement('div');
+      bottleDiv.classList.add('bottle');
+      bottleDiv.dataset.index = index;
+      bottleDiv.onclick = () => handleBottleClick(index);
+
+      for (let i = 0; i < BOTTLE_CAPACITY; i++) {
+        const liquidDiv = document.createElement('div');
+        liquidDiv.classList.add('liquid');
+        if (i < bottleContent.length) {
+          liquidDiv.classList.add(bottleContent[i]);
+        } else {
+          liquidDiv.classList.add('empty');
+        }
+        bottleDiv.appendChild(liquidDiv);
+      }
+
+      if (index === selectedBottleIndex) {
+        bottleDiv.classList.add('selected');
+      }
+      gameContainer.appendChild(bottleDiv);
+    });
+  }
+
+  function handleBottleClick(index) {
+    if (gameScreenContainer.classList.contains('hidden')) return;
+
+    const clickedBottleData = bottlesData[index];
+
+    if (selectedBottleIndex === -1) {
+      if (clickedBottleData.length > 0) {
+        selectedBottleIndex = index;
+        renderGame();
+      } else {
+        playSound(errorSound);
+      }
+    } else {
+      if (selectedBottleIndex === index) {
+        selectedBottleIndex = -1;
+        renderGame();
+      } else {
+        const sourceBottleData = bottlesData[selectedBottleIndex];
+
+        if (canPour(sourceBottleData, clickedBottleData)) {
+          pourLiquid(selectedBottleIndex, index);
+        } else {
+          playSound(errorSound);
+          selectedBottleIndex = -1;
+          renderGame();
+        }
+      }
+    }
+  }
+
+  function canPour(sourceBottle, targetBottle) {
+    if (sourceBottle.length === 0) return false;
+    if (targetBottle.length === BOTTLE_CAPACITY) return false;
+
+    const topColorSource = sourceBottle[sourceBottle.length - 1];
+    if (targetBottle.length === 0) return true;
+
+    const topColorTarget = targetBottle[targetBottle.length - 1];
+    return topColorSource === topColorTarget;
+  }
+
+  function pourLiquid(fromIndex, toIndex) {
+    const sourceBottle = bottlesData[fromIndex];
+    const targetBottle = bottlesData[toIndex];
+    const { color: colorToMove, count: movableUnits } = getTopLiquidBlock(sourceBottle);
+
+    if (!colorToMove) return;
+
+    let unitsActuallyPoured = 0;
+    for (let i = 0; i < movableUnits; i++) {
+      if (targetBottle.length < BOTTLE_CAPACITY) {
+        if (targetBottle.length === 0 || targetBottle[targetBottle.length -1] === colorToMove) {
+            targetBottle.push(sourceBottle.pop());
+            unitsActuallyPoured++;
+        } else break;
+      } else {
+        break;
+      }
+    }
+
+    if (unitsActuallyPoured > 0) {
+      moves++;
+      playSound(pourSound);
+      updateStatsDisplay();
+      selectedBottleIndex = -1;
+      renderGame();
+
+      if (checkWinConditionInternal()) {
+          handleWin();
+      }
+    } else {
+      selectedBottleIndex = -1;
+      renderGame();
+    }
+  }
+
+  function checkWinConditionInternal() {
+    if (bottlesData.length === 0) return false;
+    return isBoardSolved(bottlesData);
+  }
+
+  function handleWin() {
+    playSound(winSound);
+    coins += COINS_PER_WIN;
+
+    let specialPrizeMessage = "";
+    if (currentLevel === 200 && !hasWonLevel200) {
+        hasWonLevel200 = true;
+        specialPrizeMessage = "शानदार! आपने लेवल 200 जीता! 2000 रुपये के पुरस्कार के दावे के लिए हमसे <a href='mailto:ad7084259@gmail.com?subject=Water Sort Puzzle - Level 200 Prize Claim (Level " + currentLevel + ")'>ad7084259@gmail.com</a> पर संपर्क करें।";
+    } else if (currentLevel === 600 && !hasWonLevel600) { // Prize for level 600
+        hasWonLevel600 = true;
+        specialPrizeMessage = "अविश्वसनीय! आपने लेवल 600 जीता! 6000 रुपये के पुरस्कार के दावे के लिए हमसे <a href='mailto:ad7084259@gmail.com?subject=Water Sort Puzzle - Level 600 Prize Claim (Level " + currentLevel + ")'>ad7084259@gmail.com</a> पर संपर्क करें।";
+    }
+
+
+    if (currentLevel === maxUnlockedLevel && currentLevel < TOTAL_LEVELS) {
+      maxUnlockedLevel++;
+    }
+    saveGameData();
+    updateStatsDisplay();
+
+    disableGameInteractions(true);
+
+    setTimeout(() => {
+      const container = document.createElement('div');
+      container.style.cssText = `
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #3a1c71DD, #d76d77DD, #ffaf7bDD); backdrop-filter: blur(5px);
+        color: white; padding: 25px 30px; border-radius: 15px; text-align: center;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.4); z-index: 1000; font-size: 1.1em;
+      `;
+      const title = document.createElement('h3');
+      title.textContent = `लेवल ${currentLevel} पूरा हुआ!`;
+      title.style.marginBottom = '10px';
+
+      const message = document.createElement('p');
+      message.textContent = `आपने ${COINS_PER_WIN} कॉइन जीते।`;
+      if (specialPrizeMessage) {
+          message.innerHTML += `<br><br><strong style="color: #fadf70; font-size: 1.1em;">${specialPrizeMessage}</strong>`;
+      }
+      message.style.marginBottom = '20px';
+
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = (currentLevel < TOTAL_LEVELS) ? "अगला लेवल" : "होम";
+      nextBtn.style.cssText = `
+        padding: 10px 20px; background: #fff; color: #3a1c71; border: none;
+        border-radius: 8px; font-weight: bold; cursor: pointer;
+      `;
+
+      container.appendChild(title);
+      container.appendChild(message);
+      container.appendChild(nextBtn);
+      document.body.appendChild(container);
+
+      nextBtn.onclick = () => {
+        document.body.removeChild(container);
+        disableGameInteractions(false);
+        if (currentLevel < TOTAL_LEVELS) {
+          startGame(currentLevel + 1);
+        } else {
+          alert("बधाई हो! आपने सभी लेवल पूरे कर लिए हैं!");
+          showHomeScreen();
+        }
+      };
+    }, 600);
+  }
+
+  function disableGameInteractions(disable) {
+    const allBottles = gameContainer.querySelectorAll('.bottle');
+    allBottles.forEach(bottleEl => {
+        bottleEl.style.pointerEvents = disable ? 'none' : 'auto';
+    });
+
+    document.getElementById('goHomeBtn').disabled = disable;
+    document.getElementById('skipBtn').disabled = disable ? true : (coins < SKIP_LEVEL_COST || currentLevel >= TOTAL_LEVELS);
+    document.getElementById('resetGameBtn').disabled = disable;
+  }
+
+  // --- UI Updates & Button States ---
+  function updateStatsDisplay() {
+    levelDisplay.textContent = `लेवल: ${currentLevel}`;
+    scoreDisplay.textContent = `चालें: ${moves}`;
+    coinDisplay.textContent = `कॉइन: ${coins}`;
+    updateSkipButtonState();
+  }
+
+  function updateSkipButtonState() {
+    const skipButton = document.getElementById('skipBtn');
+    skipButton.textContent = `Skip (${SKIP_LEVEL_COST})`;
+    if (coins < SKIP_LEVEL_COST || currentLevel >= TOTAL_LEVELS) {
+      skipButton.disabled = true;
+    } else {
+      skipButton.disabled = false;
+    }
+  }
+
+  // --- LocalStorage ---
+  function saveGameData() {
+    try {
+      localStorage.setItem(LS_MAX_UNLOCKED_LEVEL, maxUnlockedLevel.toString());
+      localStorage.setItem(LS_COINS, coins.toString());
+      localStorage.setItem(LS_WON_LEVEL_200, hasWonLevel200.toString());
+      localStorage.setItem(LS_WON_LEVEL_600, hasWonLevel600.toString()); // Save level 600 win status
+    } catch (e) {
+      console.warn("Could not save game data to localStorage:", e);
+    }
+  }
+
+  function loadGameData() {
+    try {
+      maxUnlockedLevel = parseInt(localStorage.getItem(LS_MAX_UNLOCKED_LEVEL)) || 1;
+      coins = parseInt(localStorage.getItem(LS_COINS)) || 0;
+      hasWonLevel200 = localStorage.getItem(LS_WON_LEVEL_200) === 'true';
+      hasWonLevel600 = localStorage.getItem(LS_WON_LEVEL_600) === 'true'; // Load level 600 win status
+    } catch (e) {
+      console.warn("Could not load game data from localStorage:", e);
+      maxUnlockedLevel = 1;
+      coins = 0;
+      hasWonLevel200 = false;
+      hasWonLevel600 = false;
+    }
+  }
+
+  // --- Sound Helper ---
+  function playSound(soundElement) {
+    if (soundElement && typeof soundElement.play === 'function') {
+      soundElement.currentTime = 0;
+      soundElement.play().catch(error => {
+        // console.debug("Sound play failed or interrupted:", error);
+      });
+    }
+  }
+
+  // --- Global Functions for HTML onclick attributes ---
+  window.goToHomeScreen = function() {
+    saveGameData();
+    showHomeScreen();
+  };
+
+  window.skipLevel = function() {
+    if (coins >= SKIP_LEVEL_COST && currentLevel < TOTAL_LEVELS) {
+      coins -= SKIP_LEVEL_COST;
+      if (currentLevel === maxUnlockedLevel && currentLevel < TOTAL_LEVELS) {
+        maxUnlockedLevel++;
+      }
+      saveGameData();
+      updateStatsDisplay();
+      startGame(currentLevel + 1);
+
+    } else if (currentLevel >= TOTAL_LEVELS) {
+        alert("आप पहले से ही अंतिम लेवल पर हैं!");
+    } else {
+        alert(`लेवल स्किप करने के लिए आपके पास पर्याप्त कॉइन (${SKIP_LEVEL_COST}) नहीं हैं।`);
+    }
+  };
+
+  window.resetGame = function() {
+    startGame(currentLevel);
+  };
+
+  // --- Start the game ---
+  document.addEventListener('DOMContentLoaded', initGame);
+</script>
+</body>
+</html>
